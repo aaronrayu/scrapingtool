@@ -6,7 +6,17 @@ from flask_cors import CORS
 from urllib.parse import urlparse, urljoin
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "https://aaronrayu.github.io",  # Tu dominio de GitHub Pages
+            "http://localhost:5000",         # Para desarrollo local
+            "http://127.0.0.1:5000"         # También para desarrollo local
+        ],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 def extraer_emails(texto):
     """
