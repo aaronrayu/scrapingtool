@@ -23,8 +23,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Run Python script
+    - name: Run tests
       env:
         PYTHONWARNINGS: "ignore:Unverified HTTPS request"
       run: |
-        python webscraping.py
+        pytest test_app.py -v
