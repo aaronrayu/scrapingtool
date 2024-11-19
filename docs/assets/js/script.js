@@ -14,7 +14,7 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
         loadingDiv.style.display = 'block';
         resultadoDiv.innerHTML = '';
         
-        const response = await fetch('http://localhost:5000/scrape', {
+        const response = await fetch('http://127.0.0.1:5000/scrape', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
