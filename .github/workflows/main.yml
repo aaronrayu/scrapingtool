@@ -25,4 +25,4 @@ jobs:
         
     - name: Verify Python syntax
       run: |
-        python -m py_compile webscraping.py
+        python src/python/webscraping.py  # Actualiza la ruta aquí
