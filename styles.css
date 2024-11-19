@@ -1,0 +1,334 @@
+/* Variables y reset */
+:root {
+    --primary-color: #2196F3;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --border-radius: 8px;
+    --padding: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos base */
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: var(--padding);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* Formulario */
+form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="url"], input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+}
+
+button {
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #1976D2;
+}
+
+/* Secciones de resultados */
+.seccion {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.seccion h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* Redes sociales */
+.redes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.red-social {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid #eee;
+}
+
+.red-social h5 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+/* Lista de enlaces */
+.lista-enlaces {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+}
+
+.enlace-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.enlace-item:last-child {
+    border-bottom: none;
+}
+
+.enlace-item a {
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+}
+
+.enlace-texto {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.enlace-url {
+    font-size: 0.9em;
+    color: #666;
+    word-break: break-all;
+}
+
+/* Buscador */
+.buscador {
+    margin-bottom: 15px;
+}
+
+/* Loading spinner */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    form {
+        flex-direction: column;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
+
+/* Agregar al inicio del archivo CSS */
+.hidden {
+    display: none;
+}
+
+/* Estilos para la página de inicio */
+#inicio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+#inicio h1 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+}
+
+#inicio form {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* Estilos para la nueva sección de imágenes y metadatos */
+.subseccion {
+    background: #f8f9fa;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: var(--border-radius);
+}
+
+.subseccion h5 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.subseccion h6 {
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.contenido-imagenes,
+.contenido-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.lista-emails-img,
+.lista-links-img,
+.lista-emails-meta,
+.lista-links-meta,
+.lista-redes-meta {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lista-emails-img li,
+.lista-links-img li,
+.lista-emails-meta li,
+.lista-links-meta li,
+.lista-redes-meta li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    word-break: break-all;
+}
+
+.lista-links-img a,
+.lista-links-meta a,
+.lista-redes-meta a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.lista-links-img a:hover,
+.lista-links-meta a:hover,
+.lista-redes-meta a:hover {
+    text-decoration: underline;
+}
+
+.container#inicio {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.container#inicio h1 {
+    color: #333;
+    margin-bottom: 0.3rem;
+}
+
+.descripcion p {
+    background-color: #e8fde3;
+    color: #2e7d32;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #4caf50;
+    margin: 1.5rem 0;
+    font-size: 1.1rem;
+}
+
+.header {
+    /* Disposición y tamaño */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 2rem;
+    height: 80px;
+    width: 100%;
+    
+    /* Fondo y sombra */
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+    /* Posicionamiento fijo en la parte superior */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Estilos para el logo */
+.header__logo {
+    height: 40px;
+    width: auto;
+}
+
+/* Estilos para la navegación */
+.header__nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.header__nav-link {
+    color: #333333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.header__nav-link:hover {
+    color: #007bff;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+    
+    .header__nav {
+        gap: 1rem;
+    }
+}
