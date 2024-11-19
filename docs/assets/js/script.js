@@ -1,7 +1,7 @@
 // Determina la URL base según el entorno
 const BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://127.0.0.1:5000'
-    : 'https://tu-api-publica.com'; // Cambia esto por tu URL de producción
+    : 'https://scrapingtool.onrender.com'; // Cambia esto por tu URL de producción
 
 document.getElementById('scrapingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
