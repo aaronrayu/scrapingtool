@@ -39,9 +39,62 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
             throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
         }
         
-        let data = await response.json();
-        
-        // ... resto del código igual ...
+        const data = await response.json();
+        console.log('Datos recibidos:', data);
+
+        resultadoDiv.innerHTML = `
+            <h3 id="resultadosTitulo">Resultados para: ${data.titulo}</h3>
+            
+            <!-- Sección Emails -->
+            <div class="seccion">
+                <h4>Emails Encontrados (${data.emails.total_emails})</h4>
+                <ul class="lista-emails">
+                    ${data.emails.emails_encontrados.length > 0 
+                        ? data.emails.emails_encontrados.map(email => `<li>${email}</li>`).join('')
+                        : '<li>No se encontraron emails</li>'}
+                </ul>
+            </div>
+
+            <!-- Sección Redes Sociales -->
+            <div class="seccion">
+                <h4>Redes Sociales</h4>
+                <div class="redes-grid">
+                    ${Object.entries(data.redes_sociales).map(([red, perfiles]) => `
+                        <div class="red-social ${red.toLowerCase()}">
+                            <h5>${red.charAt(0).toUpperCase() + red.slice(1)} (${perfiles.length})</h5>
+                            <ul class="lista-${red.toLowerCase()}">
+                                ${perfiles.length > 0
+                                    ? perfiles.map(perfil => `
+                                        <li><a href="${perfil.url}" target="_blank">${perfil.texto || perfil.url}</a></li>
+                                    `).join('')
+                                    : `<li>No se encontraron perfiles de ${red}</li>`}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- Sección Estadísticas -->
+            <div class="seccion">
+                <h4>Estadísticas</h4>
+                <ul class="estadisticas">
+                    ${Object.entries(data.estadisticas).map(([key, value]) => `
+                        <li>${key.replace('_', ' ').charAt(0).toUpperCase() + key.slice(1)}: ${value}</li>
+                    `).join('')}
+                </ul>
+            </div>
+
+            <div class="seccion">
+                <button onclick="volverInicio()" class="btn-volver">
+                    Nueva búsqueda
+                </button>
+            </div>
+        `;
+
+        document.getElementById('resultadosTitulo').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
 
     } catch (error) {
         console.error('Error completo:', error);
