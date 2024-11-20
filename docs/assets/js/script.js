@@ -40,22 +40,22 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
         }
         
         let data = await response.json();
-        console.log('Datos recibidos:', data);
+        console.log('Datos recibidos del servidor:', data);
 
-        // Asegurar que los datos tengan la estructura correcta
-        data = {
-            titulo: data?.titulo || url,
+        // Estructura de datos por defecto
+        const defaultData = {
+            titulo: url,
             emails: {
-                emails_encontrados: data?.emails?.emails_encontrados || [],
-                total_emails: data?.emails?.total_emails || 0
+                emails_encontrados: [],
+                total_emails: 0
             },
-            redes_sociales: data?.redes_sociales || {
+            redes_sociales: {
                 linkedin: [],
                 facebook: [],
                 twitter: [],
                 instagram: []
             },
-            estadisticas: data?.estadisticas || {
+            estadisticas: {
                 total_emails: 0,
                 total_enlaces: 0,
                 total_linkedin: 0,
@@ -65,6 +65,27 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
             }
         };
 
+        // Combinar datos recibidos con datos por defecto
+        data = {
+            ...defaultData,
+            ...data,
+            emails: {
+                ...defaultData.emails,
+                ...(data?.emails || {})
+            },
+            redes_sociales: {
+                ...defaultData.redes_sociales,
+                ...(data?.redes_sociales || {})
+            },
+            estadisticas: {
+                ...defaultData.estadisticas,
+                ...(data?.estadisticas || {})
+            }
+        };
+
+        console.log('Datos procesados:', data);
+
+        // Generar HTML con los datos procesados
         resultadoDiv.innerHTML = `
             <h3 id="resultadosTitulo">Resultados para: ${data.titulo}</h3>
             
@@ -82,18 +103,46 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
             <div class="seccion">
                 <h4>Redes Sociales</h4>
                 <div class="redes-grid">
-                    ${Object.entries(data.redes_sociales).map(([red, perfiles]) => `
-                        <div class="red-social ${red.toLowerCase()}">
-                            <h5>${red.charAt(0).toUpperCase() + red.slice(1)} (${Array.isArray(perfiles) ? perfiles.length : 0})</h5>
-                            <ul class="lista-${red.toLowerCase()}">
-                                ${Array.isArray(perfiles) && perfiles.length > 0
-                                    ? perfiles.map(perfil => `
-                                        <li><a href="${perfil.url || perfil}" target="_blank">${perfil.texto || perfil.url || perfil}</a></li>
-                                    `).join('')
-                                    : `<li>No se encontraron perfiles de ${red}</li>`}
-                            </ul>
-                        </div>
-                    `).join('')}
+                    <div class="red-social linkedin">
+                        <h5>LinkedIn (${data.redes_sociales.linkedin.length})</h5>
+                        <ul class="lista-linkedin">
+                            ${data.redes_sociales.linkedin.length > 0
+                                ? data.redes_sociales.linkedin.map(perfil => 
+                                    `<li><a href="${perfil.url}" target="_blank">${perfil.texto || perfil.url}</a></li>`
+                                ).join('')
+                                : '<li>No se encontraron perfiles de LinkedIn</li>'}
+                        </ul>
+                    </div>
+                    <div class="red-social facebook">
+                        <h5>Facebook (${data.redes_sociales.facebook.length})</h5>
+                        <ul class="lista-facebook">
+                            ${data.redes_sociales.facebook.length > 0
+                                ? data.redes_sociales.facebook.map(perfil => 
+                                    `<li><a href="${perfil.url}" target="_blank">${perfil.texto || perfil.url}</a></li>`
+                                ).join('')
+                                : '<li>No se encontraron perfiles de Facebook</li>'}
+                        </ul>
+                    </div>
+                    <div class="red-social twitter">
+                        <h5>Twitter (${data.redes_sociales.twitter.length})</h5>
+                        <ul class="lista-twitter">
+                            ${data.redes_sociales.twitter.length > 0
+                                ? data.redes_sociales.twitter.map(perfil => 
+                                    `<li><a href="${perfil.url}" target="_blank">${perfil.texto || perfil.url}</a></li>`
+                                ).join('')
+                                : '<li>No se encontraron perfiles de Twitter</li>'}
+                        </ul>
+                    </div>
+                    <div class="red-social instagram">
+                        <h5>Instagram (${data.redes_sociales.instagram.length})</h5>
+                        <ul class="lista-instagram">
+                            ${data.redes_sociales.instagram.length > 0
+                                ? data.redes_sociales.instagram.map(perfil => 
+                                    `<li><a href="${perfil.url}" target="_blank">${perfil.texto || perfil.url}</a></li>`
+                                ).join('')
+                                : '<li>No se encontraron perfiles de Instagram</li>'}
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -101,9 +150,12 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
             <div class="seccion">
                 <h4>Estadísticas</h4>
                 <ul class="estadisticas">
-                    ${Object.entries(data.estadisticas).map(([key, value]) => `
-                        <li>${key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.slice(1)}: ${value}</li>
-                    `).join('')}
+                    <li>Total Emails: ${data.estadisticas.total_emails}</li>
+                    <li>Total Enlaces: ${data.estadisticas.total_enlaces}</li>
+                    <li>LinkedIn: ${data.estadisticas.total_linkedin}</li>
+                    <li>Facebook: ${data.estadisticas.total_facebook}</li>
+                    <li>Twitter: ${data.estadisticas.total_twitter}</li>
+                    <li>Instagram: ${data.estadisticas.total_instagram}</li>
                 </ul>
             </div>
 
@@ -114,6 +166,7 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
             </div>
         `;
 
+        // Scroll a los resultados
         document.getElementById('resultadosTitulo').scrollIntoView({ 
             behavior: 'smooth',
             block: 'start'
@@ -124,12 +177,6 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
         resultadoDiv.innerHTML = `
             <div class="error">
                 <p>Error: ${error.message}</p>
-                <p>Por favor verifica:</p>
-                <ul>
-                    <li>Que la URL sea válida</li>
-                    <li>Que el servidor esté funcionando</li>
-                    <li>Tu conexión a internet</li>
-                </ul>
                 <button onclick="volverInicio()" class="btn-volver">
                     Volver a intentar
                 </button>
