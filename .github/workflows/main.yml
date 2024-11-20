@@ -25,4 +25,4 @@ jobs:
         
     - name: Verify Python syntax
       run: |
-        python src/python/webscraping.py  # Actualiza la ruta aquí
+        python webscraping.py  # Actualiza la ruta aquí
