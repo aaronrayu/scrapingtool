@@ -39,8 +39,31 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
             throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
         }
         
-        const data = await response.json();
+        let data = await response.json();
         console.log('Datos recibidos:', data);
+
+        // Asegurar que los datos tengan la estructura correcta
+        data = {
+            titulo: data?.titulo || url,
+            emails: {
+                emails_encontrados: data?.emails?.emails_encontrados || [],
+                total_emails: data?.emails?.total_emails || 0
+            },
+            redes_sociales: data?.redes_sociales || {
+                linkedin: [],
+                facebook: [],
+                twitter: [],
+                instagram: []
+            },
+            estadisticas: data?.estadisticas || {
+                total_emails: 0,
+                total_enlaces: 0,
+                total_linkedin: 0,
+                total_facebook: 0,
+                total_twitter: 0,
+                total_instagram: 0
+            }
+        };
 
         resultadoDiv.innerHTML = `
             <h3 id="resultadosTitulo">Resultados para: ${data.titulo}</h3>
@@ -61,11 +84,11 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
                 <div class="redes-grid">
                     ${Object.entries(data.redes_sociales).map(([red, perfiles]) => `
                         <div class="red-social ${red.toLowerCase()}">
-                            <h5>${red.charAt(0).toUpperCase() + red.slice(1)} (${perfiles.length})</h5>
+                            <h5>${red.charAt(0).toUpperCase() + red.slice(1)} (${Array.isArray(perfiles) ? perfiles.length : 0})</h5>
                             <ul class="lista-${red.toLowerCase()}">
-                                ${perfiles.length > 0
+                                ${Array.isArray(perfiles) && perfiles.length > 0
                                     ? perfiles.map(perfil => `
-                                        <li><a href="${perfil.url}" target="_blank">${perfil.texto || perfil.url}</a></li>
+                                        <li><a href="${perfil.url || perfil}" target="_blank">${perfil.texto || perfil.url || perfil}</a></li>
                                     `).join('')
                                     : `<li>No se encontraron perfiles de ${red}</li>`}
                             </ul>
@@ -79,7 +102,7 @@ document.getElementById('scrapingForm').addEventListener('submit', async (e) => 
                 <h4>Estadísticas</h4>
                 <ul class="estadisticas">
                     ${Object.entries(data.estadisticas).map(([key, value]) => `
-                        <li>${key.replace('_', ' ').charAt(0).toUpperCase() + key.slice(1)}: ${value}</li>
+                        <li>${key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.slice(1)}: ${value}</li>
                     `).join('')}
                 </ul>
             </div>
